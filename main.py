@@ -1,5 +1,7 @@
 import gym
 import time
+import argparse
+
 from algo.others import heuristic
 from utils import RLPayload, Logger, prng
 
@@ -44,11 +46,7 @@ def run(
 	env.close()
 
 if __name__ == "__main__":
-	# TODO: add cli args
-	# 1) Seed
-	# 2) Env choice
-	# 3) fRender param
-
+	
 	# TODO: make envs work
 	# 1) Lunar lander works
 	# 2) Cheetah does not work
@@ -57,4 +55,16 @@ if __name__ == "__main__":
 		"cheetah":"HalfCheetah-v2"
 	}
 
-	run(envs["lunar"], 2000, True)
+	parser = argparse.ArgumentParser(description="Run a simple environement and debug it in an easy manner")
+	parser.add_argument("--seed", default=42, type=int, help="A seed for environment PRNG")
+	parser.add_argument("--env", default="lunar", type=str, help="Choose an environment to run", choices=envs.keys())
+	parser.add_argument("--render", default=False, type=bool, help="Flag tpo render the environment or run in a headless mode")
+	args = vars(parser.parse_args())
+
+	prng.setEnvSeed(args["seed"])
+
+	run(
+		envs[args["env"]],
+		2000,
+		args["render"],
+	)
