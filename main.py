@@ -3,6 +3,7 @@ import time
 import argparse
 
 from algo.others import heuristic
+from envs import ENVS
 from utils import RLPayload, Logger, prng
 
 def run(
@@ -46,25 +47,20 @@ def run(
 	env.close()
 
 if __name__ == "__main__":
-	
 	# TODO: make envs work
 	# 1) Lunar lander works
 	# 2) Cheetah does not work
-	envs = {
-		"lunar":"LunarLander-v2",
-		"cheetah":"HalfCheetah-v2"
-	}
 
 	parser = argparse.ArgumentParser(description="Run a simple environement and debug it in an easy manner")
 	parser.add_argument("--seed", default=42, type=int, help="A seed for environment PRNG")
-	parser.add_argument("--env", default="lunar", type=str, help="Choose an environment to run", choices=envs.keys())
-	parser.add_argument("--render", default=False, type=bool, help="Flag tpo render the environment or run in a headless mode")
+	parser.add_argument("--env", default="lunar", type=str, help="Choose an environment to run", choices=ENVS.keys())
+	parser.add_argument("--render", default=False, type=bool, help="Flag to render the environment or run in a headless mode")
 	args = vars(parser.parse_args())
 
 	prng.setEnvSeed(args["seed"])
 
 	run(
-		envs[args["env"]],
+		ENVS[args["env"]],
 		2000,
 		args["render"],
 	)
